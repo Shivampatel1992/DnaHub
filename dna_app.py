@@ -1,21 +1,27 @@
-from typing import Any
+#Author: Shivam Patel
 
+from typing import Any
 import pandas as pd
 import streamlit as st
 import altair as alt
 from PIL import Image
 
 
-# Title
+# Title and logo
 image = Image.open('image.png')
 st.image(image, use_column_width = True)
+
+# Mission and Purpose
 st.write("""
 
 ***
 
-# DNA HUB Web Application
+# Mission & Purpose
 
-This application designed for easier use of analyzing DNA in one centralized zone in a more optimized method!
+Dna Hub is an web-based application designed to analyze DNA for either clinical research or commercial product design.
+User no longer needs to go through the tedious process of traveling to various sites to utilize essential tools. DNA Hub
+is designed for have a central location for essential tools whether it be transcription, translation, nucleotide distrubtion, amino acid
+distribution, or data on basic structure and interaction. DNA Hub aims to make bioinformatic research efficient! All you need is a FASTA Sequence.
 
 ****
 """)
@@ -33,6 +39,7 @@ sequence = ''.join(sequence)
 st.write("""
 ***
 """)
+
 # INPUT DISPLAY
 st.header("INPUT")
 sequence
@@ -41,10 +48,10 @@ st.write("""
 ***
 """)
 
-#OUTPUT
+# OUTPUT  DISPLAY
 st.header("OUTPUT")
 
-#ValidateSequence
+# VALIDATION
 def validate(seq1):
     for x in seq1:
         test = False
@@ -57,8 +64,6 @@ def validate(seq1):
     return test
 
 
-
-
 if validate(sequence) == True:
     st.write(sequence)
 else:
@@ -66,7 +71,7 @@ else:
 
 
 
-# Nucleotide Information
+# Nucleotide count
 def nucleotide_count(seq):
     d = dict([
         ('A', seq.count('A')),
@@ -79,13 +84,15 @@ def nucleotide_count(seq):
 X = nucleotide_count(sequence)
 
 st.subheader("Nucleotide Count")
+
 #DATAFRAME
 df = pd.DataFrame.from_dict(X, orient='index')
 df = df.rename({0: 'count'}, axis ='columns')
 df.reset_index(inplace=True)
 df = df.rename(columns = {'index':'nucleotide'})
 st.write(df)
-#BAR PLOT REPRESENTATION
+
+#NUCELOTIDE DISTRIBUTION BAR PLOT
 
 st.write("""
 
@@ -100,6 +107,7 @@ st.write("""
 ***
 """)
 
+# HYDROGEN BONDING
 st.subheader("Hydrogen Bonding")
 
 GC = (X['G'] + X['C'])
@@ -136,7 +144,8 @@ st.write("""
 
 ***
 """)
-#MRNA SEQUENCE INFORMATION
+
+#MRNA SEQUENCE
 st.subheader('mRNA Sequence')
 def transcription(DNAseq):
     for x in DNAseq:
@@ -150,7 +159,7 @@ st.write("""
 
 ***
 """)
-
+# AMINO ACID SEQUENCE
 st.subheader('Amino Acid Sequence')
 def translation(RNA):
     codon_dictionary = {
@@ -191,6 +200,8 @@ st.write("""
 
 ***
 """)
+
+#POLARITY
 st.subheader('Polarity')
 st.write('Each amino acid within the amino acid sequence carries specific polarity characteristics. Analysis ' +
          ' of this sequence, the amino acids are grouped by charge and polarity. This information can be useful' +
@@ -221,8 +232,6 @@ def polarity(amino_acid):
             'C': 'neutral'
             }
 
-    
-    
     npcount = 0
     poscount = 0
     negcount = 0
@@ -246,12 +255,9 @@ def polarity(amino_acid):
 
     return data
 
-
 data = polarity(AAseq)
 
 # DATAFRAME
-
-
 
 df1 = pd.DataFrame.from_dict(data, orient='index')
 df1 = df1.rename({0: 'Count'}, axis='columns')
@@ -259,7 +265,7 @@ df1.reset_index(inplace=True)
 df1 = df1.rename(columns={'index': 'Type'})
 st.write(df1)
 
-# BAR PLOT REPRESENTATION
+# POLARITY DISTRUBUTION BAR PLOT
 
 st.write("""
 
@@ -276,6 +282,9 @@ st.write("""
 
 ***
 """)
+
+st.write("Special thanks to Dr. Katherine Herbert, Montclair University, for her continuous support during the development of this bioinformatics application. "
+         + "There will be updates with new features in the new future. For any support please contact patels22@montclair.edu.")
 
 
 
